@@ -115,11 +115,6 @@ dots.forEach((dot, i) => {
     dot.addEventListener('click', () => setSlide(i));
 });
 
-// Auto-slide every 5 seconds
-setInterval(() => {
-    setSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0);
-}, 5000);
-
 // ============ HISAB (INCOME/EXPENSE) - LIVE FROM GOOGLE SHEET ============
 const SHEET_ID = '1uMZ36fbl7gjTe3FCqxn4GoEXAvxqaaAJLAHla9WC3mg';
 const SHEET_GID = 1; // Sheet2 (English version)
