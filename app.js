@@ -120,187 +120,240 @@ const SHEET_ID = '1uMZ36fbl7gjTe3FCqxn4GoEXAvxqaaAJLAHla9WC3mg';
 const SHEET_GID = 1; // Sheet2 (English version)
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${SHEET_GID}&headers=1`;
 
+// Google Apps Script Web App URL — reads ALL cell values including dropdown selections
+// To set up: see instructions in the README or follow the setup steps
+let APPS_SCRIPT_URL = '';
+
 let musalliData = [];
 let monthColumns = [];
 const toBn = n => n.toString().replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
 
-// Fetch live data from Google Sheet (supports both server & local file:// via JSONP fallback)
+// Map English month names to Bengali for display
+const monthNameMap = {
+    'january': 'জানুয়ারি', 'february': 'ফেব্রুয়ারি', 'march': 'মার্চ',
+    'april': 'এপ্রিল', 'may': 'মে', 'june': 'জুন',
+    'july': 'জুলাই', 'august': 'আগস্ট', 'september': 'সেপ্টেম্বর',
+    'october': 'অক্টোবর', 'november': 'নভেম্বর', 'december': 'ডিসেম্বর'
+};
+
+// Parse a cell value into status and amount
+function parseCellValue(raw) {
+    let status = 'empty';
+    let amount = 0;
+
+    if (raw === null || raw === undefined || raw === '') return { status, amount };
+
+    const rawStr = String(raw).trim().toLowerCase();
+
+    if (raw === true || rawStr === 'true' || rawStr === 'yes' || rawStr === 'হ্যাঁ' || rawStr === 'y') {
+        status = 'yes'; amount = 0;
+    } else if (raw === false || rawStr === 'false' || rawStr === 'no' || rawStr === 'না' || rawStr === 'n') {
+        status = 'no'; amount = 0;
+    } else {
+        const num = parseFloat(raw);
+        if (!isNaN(num) && num > 0) { status = 'number'; amount = num; }
+    }
+
+    return { status, amount };
+}
+
+// Process raw 2D array data (from Apps Script) into musalliData
+function processArrayData(allRows) {
+    const bnMonthNames = Object.values(monthNameMap);
+
+    // Row 0 is the header row: [Name, Monthly Donation, January, February, ...]
+    const headerRow = allRows[0];
+    monthColumns = [];
+    for (let i = 2; i < headerRow.length; i++) {
+        const rawLabel = String(headerRow[i] || '').trim();
+        if (rawLabel) {
+            const bnLabel = monthNameMap[rawLabel.toLowerCase()] || rawLabel;
+            monthColumns.push({ index: i, label: bnLabel, rawLabel });
+        }
+    }
+    if (monthColumns.length === 0) {
+        for (let i = 2; i < headerRow.length && (i - 2) < 12; i++) {
+            monthColumns.push({ index: i, label: bnMonthNames[i - 2], rawLabel: '' });
+        }
+    }
+
+    const skipWords = ['name', 'নাম', 'monthly donation', 'মাসিক চাঁদা'];
+    musalliData = [];
+    window._sheetTotals = {};
+
+    for (let r = 1; r < allRows.length; r++) {
+        const cells = allRows[r];
+        if (!cells || !cells[0]) continue;
+
+        const name = String(cells[0]).trim();
+        if (!name) continue;
+
+        if (name.toLowerCase().includes('total')) {
+            for (const mc of monthColumns) {
+                window._sheetTotals[mc.label] = parseFloat(cells[mc.index]) || 0;
+            }
+            window._sheetTotals._colB = parseFloat(cells[1]) || 0;
+            continue;
+        }
+
+        if (skipWords.some(w => name.toLowerCase().includes(w))) continue;
+
+        const monthlyAmount = parseFloat(cells[1]) || 0;
+        const musalli = { name, monthlyAmount, months: {}, monthStatus: {} };
+        let hasAnyPayment = false;
+
+        for (const mc of monthColumns) {
+            const raw = cells[mc.index];
+            const { status, amount } = parseCellValue(raw);
+            musalli.months[mc.label] = amount;
+            musalli.monthStatus[mc.label] = status;
+            if (status === 'yes' || status === 'number') hasAnyPayment = true;
+        }
+
+        musalli.totalPaid = Object.values(musalli.months).reduce((s, v) => s + v, 0);
+        musalli.hasPaid = hasAnyPayment || monthlyAmount > 0;
+        musalliData.push(musalli);
+    }
+}
+
+// Process gviz API response (fallback method)
+function processGvizData(table) {
+    const cols = table.cols;
+    const rows = table.rows;
+    const bnMonthNames = Object.values(monthNameMap);
+
+    monthColumns = [];
+    for (let i = 2; i < cols.length; i++) {
+        const rawLabel = (cols[i].label || '').trim();
+        if (rawLabel) {
+            const bnLabel = monthNameMap[rawLabel.toLowerCase()] || rawLabel;
+            monthColumns.push({ index: i, label: bnLabel, rawLabel });
+        }
+    }
+
+    if (monthColumns.length === 0) {
+        for (const row of rows) {
+            const cells = row.c;
+            if (!cells || !cells[0]) continue;
+            const val = String(cells[0].v || '').trim().toLowerCase();
+            if (val === 'name' || val === 'নাম') {
+                for (let i = 2; i < cells.length; i++) {
+                    const cellVal = cells[i] ? String(cells[i].v || '').trim() : '';
+                    if (cellVal) {
+                        const bnLabel = monthNameMap[cellVal.toLowerCase()] || cellVal;
+                        monthColumns.push({ index: i, label: bnLabel, rawLabel: cellVal });
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    if (monthColumns.length === 0) {
+        for (let i = 2; i < cols.length && (i - 2) < 12; i++) {
+            monthColumns.push({ index: i, label: bnMonthNames[i - 2], rawLabel: '' });
+        }
+    }
+
+    const skipWords = ['name', 'নাম', 'monthly donation', 'মাসিক চাঁদা'];
+    musalliData = [];
+    window._sheetTotals = {};
+
+    for (const row of rows) {
+        const cells = row.c;
+        if (!cells || !cells[0] || !cells[0].v) continue;
+
+        const name = String(cells[0].v).trim();
+        if (!name) continue;
+
+        if (name.toLowerCase().includes('total')) {
+            for (const mc of monthColumns) {
+                const cell = cells[mc.index];
+                window._sheetTotals[mc.label] = cell ? (parseFloat(cell.v) || 0) : 0;
+            }
+            window._sheetTotals._colB = cells[1] ? (parseFloat(cells[1].v) || 0) : 0;
+            continue;
+        }
+
+        if (skipWords.some(w => name.toLowerCase().includes(w))) continue;
+
+        const monthlyAmount = cells[1] ? (parseFloat(cells[1].v) || 0) : 0;
+        const musalli = { name, monthlyAmount, months: {}, monthStatus: {} };
+        let hasAnyPayment = false;
+
+        for (const mc of monthColumns) {
+            const cell = cells[mc.index];
+            const raw = (cell && cell.v !== null && cell.v !== undefined) ? cell.v : null;
+            const { status, amount } = parseCellValue(raw);
+            musalli.months[mc.label] = amount;
+            musalli.monthStatus[mc.label] = status;
+            if (status === 'yes' || status === 'number') hasAnyPayment = true;
+        }
+
+        musalli.totalPaid = Object.values(musalli.months).reduce((s, v) => s + v, 0);
+        musalli.hasPaid = hasAnyPayment || monthlyAmount > 0;
+        musalliData.push(musalli);
+    }
+}
+
+// Main fetch function — tries Apps Script first, falls back to gviz API
 async function fetchSheetData() {
     const badge = document.getElementById('hisabLiveBadge');
     try {
-        let text;
+        let usedAppsScript = false;
 
-        // Try fetch first, fallback to JSONP for local file:// or CORS issues
-        try {
-            const response = await fetch(SHEET_URL);
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            text = await response.text();
-        } catch (fetchErr) {
-            // Fallback: JSONP approach for local file:// protocol
-            text = await new Promise((resolve, reject) => {
-                const callbackName = 'sheetCallback_' + Date.now();
-                const script = document.createElement('script');
-                script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&gid=${SHEET_GID}&headers=1`;
-                window[callbackName] = function(data) {
-                    delete window[callbackName];
-                    if (document.head.contains(script)) document.head.removeChild(script);
-                    resolve('google.visualization.Query.setResponse(' + JSON.stringify(data) + ')');
-                };
-                script.onerror = () => {
-                    delete window[callbackName];
-                    document.head.removeChild(script);
-                    reject(new Error('JSONP failed'));
-                };
-                document.head.appendChild(script);
-            });
-        }
-
-        // Google returns JSONP-like: google.visualization.Query.setResponse({...})
-        const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);?/);
-        if (!jsonStr) throw new Error('Invalid response format');
-
-        const data = JSON.parse(jsonStr[1]);
-        const table = data.table;
-        const cols = table.cols;
-        const rows = table.rows;
-
-        // Sheet structure:
-        // Col A (index 0) = Name (string)
-        // Col B (index 1) = মাসিক চাঁদা / contribution amount (number)
-        // Col C-N (index 2-13) = জানুয়ারি - ডিসেম্বর (string, may have data later)
-
-        // Map English month names to Bengali for display
-        const monthNameMap = {
-            'january': 'জানুয়ারি', 'february': 'ফেব্রুয়ারি', 'march': 'মার্চ',
-            'april': 'এপ্রিল', 'may': 'মে', 'june': 'জুন',
-            'july': 'জুলাই', 'august': 'আগস্ট', 'september': 'সেপ্টেম্বর',
-            'october': 'অক্টোবর', 'november': 'নভেম্বর', 'december': 'ডিসেম্বর'
-        };
-        const bnMonthNames = Object.values(monthNameMap);
-
-        // With headers=1, row 1 is used as header.
-        // Remaining rows include: committee names (top), then a header row
-        // like "Name, Monthly Donation, January...", then data, then total.
-        // We need to find month columns from the cols labels OR detect them.
-
-        // Try to find month columns from cols (index 2+ may have month labels)
-        monthColumns = [];
-        for (let i = 2; i < cols.length; i++) {
-            const rawLabel = (cols[i].label || '').trim();
-            if (rawLabel) {
-                const bnLabel = monthNameMap[rawLabel.toLowerCase()] || rawLabel;
-                monthColumns.push({ index: i, label: bnLabel, rawLabel });
-            }
-        }
-
-        // Fallback: if columns don't have month labels, scan for a header row in data
-        if (monthColumns.length === 0) {
-            for (const row of rows) {
-                const cells = row.c;
-                if (!cells || !cells[0]) continue;
-                const val = String(cells[0].v || '').trim().toLowerCase();
-                if (val === 'name' || val === 'নাম') {
-                    // This is a header row - extract month names from it
-                    for (let i = 2; i < cells.length; i++) {
-                        const cellVal = cells[i] ? String(cells[i].v || '').trim() : '';
-                        if (cellVal) {
-                            const bnLabel = monthNameMap[cellVal.toLowerCase()] || cellVal;
-                            monthColumns.push({ index: i, label: bnLabel, rawLabel: cellVal });
-                        }
-                    }
-                    break;
+        // Method 1: Try Google Apps Script Web App (returns ALL values including dropdowns)
+        if (APPS_SCRIPT_URL) {
+            try {
+                const res = await fetch(APPS_SCRIPT_URL);
+                if (!res.ok) throw new Error('Apps Script HTTP ' + res.status);
+                const json = await res.json();
+                if (json.data && json.data.length > 1) {
+                    processArrayData(json.data);
+                    usedAppsScript = true;
                 }
+            } catch (e) {
+                console.warn('Apps Script failed, falling back to gviz:', e);
             }
         }
 
-        // Final fallback
-        if (monthColumns.length === 0) {
-            for (let i = 2; i < cols.length && (i - 2) < 12; i++) {
-                monthColumns.push({ index: i, label: bnMonthNames[i - 2], rawLabel: '' });
+        // Method 2: Fallback to gviz API (may not return dropdown values)
+        if (!usedAppsScript) {
+            let text;
+            try {
+                const response = await fetch(SHEET_URL);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                text = await response.text();
+            } catch (fetchErr) {
+                text = await new Promise((resolve, reject) => {
+                    const callbackName = 'sheetCallback_' + Date.now();
+                    const script = document.createElement('script');
+                    script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&gid=${SHEET_GID}&headers=1`;
+                    window[callbackName] = function(data) {
+                        delete window[callbackName];
+                        if (document.head.contains(script)) document.head.removeChild(script);
+                        resolve('google.visualization.Query.setResponse(' + JSON.stringify(data) + ')');
+                    };
+                    script.onerror = () => {
+                        delete window[callbackName];
+                        document.head.removeChild(script);
+                        reject(new Error('JSONP failed'));
+                    };
+                    document.head.appendChild(script);
+                });
             }
+
+            const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);?/);
+            if (!jsonStr) throw new Error('Invalid response format');
+            const data = JSON.parse(jsonStr[1]);
+            processGvizData(data.table);
         }
 
-        // Words to skip (header rows, non-person entries)
-        const skipWords = ['name', 'নাম', 'monthly donation', 'মাসিক চাঁদা'];
-
-        // Parse all rows — separate musalli data from the total row
-        musalliData = [];
-        window._sheetTotals = {}; // totals from "Total Ammout" row
-
-        for (const row of rows) {
-            const cells = row.c;
-            if (!cells || !cells[0] || !cells[0].v) continue;
-
-            const name = String(cells[0].v).trim();
-            if (!name) continue;
-
-            // Capture the "Total Ammout" row for monthly totals
-            if (name.toLowerCase().includes('total')) {
-                for (const mc of monthColumns) {
-                    const cell = cells[mc.index];
-                    window._sheetTotals[mc.label] = cell ? (parseFloat(cell.v) || 0) : 0;
-                }
-                // Also get total from col B
-                window._sheetTotals._colB = cells[1] ? (parseFloat(cells[1].v) || 0) : 0;
-                continue;
-            }
-
-            // Skip header rows
-            if (skipWords.some(w => name.toLowerCase().includes(w))) continue;
-
-            // Column B (index 1) = fixed monthly donation amount
-            const monthlyAmount = cells[1] ? (parseFloat(cells[1].v) || 0) : 0;
-
-            const musalli = { name, monthlyAmount, months: {}, monthStatus: {} };
-            let hasAnyPayment = false;
-
-            // Read month columns (C onwards, index 2+)
-            for (const mc of monthColumns) {
-                const cell = cells[mc.index];
-                let status = 'empty';
-                let amount = 0;
-
-                if (cell && cell.v !== null && cell.v !== undefined) {
-                    const raw = cell.v;
-                    const rawStr = String(raw).trim().toLowerCase();
-
-                    // Boolean true/false (checkbox or dropdown)
-                    if (raw === true || rawStr === 'true' || rawStr === 'yes' || rawStr === 'হ্যাঁ' || rawStr === 'y') {
-                        status = 'yes';
-                        amount = 0;
-                    } else if (raw === false || rawStr === 'false' || rawStr === 'no' || rawStr === 'না' || rawStr === 'n') {
-                        status = 'no';
-                        amount = 0;
-                    } else {
-                        // Number
-                        const num = parseFloat(raw);
-                        if (!isNaN(num) && num > 0) {
-                            status = 'number';
-                            amount = num;
-                        }
-                    }
-                }
-
-                musalli.months[mc.label] = amount;
-                musalli.monthStatus[mc.label] = status;
-                if (status === 'yes' || status === 'number') hasAnyPayment = true;
-            }
-
-            musalli.totalPaid = Object.values(musalli.months).reduce((s, v) => s + v, 0);
-            musalli.hasPaid = hasAnyPayment || monthlyAmount > 0;
-            musalliData.push(musalli);
-        }
-
-        // Update summary cards
+        // Update UI
         updateSummaryCards();
-
-        // Build dynamic table header
         buildTableHeader();
-
-        // Render table
         renderHisabTable();
 
-        // Update badge
         const now = new Date();
         const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         badge.innerHTML = `<i class="fas fa-check-circle"></i> লাইভ ডেটা লোড সফল — সর্বশেষ আপডেট: ${timeStr}`;
