@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বায়তুল আমান জামে মসজিদ - Baitul Aman Jame Masjid</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-bn">বায়তুল আমান</span>
+                    <span class="logo-en">Baitul Aman</span>
+                </div>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">হোম</a></li>
+                <li><a href="#about">আমাদের সম্পর্কে</a></li>
+                <li><a href="#services">সেবাসমূহ</a></li>
+                <li><a href="#prayer-times">নামাজের সময়</a></li>
+                <li><a href="#events">ইভেন্ট</a></li>
+                <li><a href="#hisab">আয়-ব্যয়</a></li>
+                <li><a href="#location">অবস্থান</a></li>
+                <li><a href="#contact">যোগাযোগ</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="nav-toggle" id="navToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="mosque-silhouette"></div>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <p class="hero-subtitle">বিসমিল্লাহির রাহমানির রাহীম</p>
+            <h1 class="hero-title">যেখানে হৃদয় <br>প্রশান্তি খুঁজে পায়</h1>
+            <p class="hero-desc">বায়তুল আমান জামে মসজিদে আপনাকে স্বাগতম। আসুন আমরা একসাথে আল্লাহর ইবাদত করি এবং সমাজে শান্তি ও সম্প্রীতি ছড়িয়ে দিই।</p>
+            <div class="hero-btns">
+                <a href="#prayer-times" class="btn btn-primary"><i class="fas fa-clock"></i> নামাজের সময়সূচী</a>
+                <a href="#about" class="btn btn-outline"><i class="fas fa-info-circle"></i> আরও জানুন</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <a href="#prayer-times"><i class="fas fa-chevron-down"></i></a>
+        </div>
+    </section>
+
+    <!-- ========== PRAYER TIMES ========== -->
+    <section class="prayer-times-section" id="prayer-times">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">নামাজের সময়সূচী</h2>
+                <p class="section-subtitle">প্রতিদিনের পাঁচ ওয়াক্ত নামাজের সময় জেনে নিন</p>
+            </div>
+            <div class="prayer-clock-card">
+                <div class="prayer-clock-header">
+                    <span class="mosque-name-clock">বায়তুল আমান জামে মসজিদ</span>
+                    <div class="live-clock" id="liveClock">00:00:00</div>
+                    <div class="live-date" id="liveDate"></div>
+                </div>
+                <div class="prayer-grid">
+                    <div class="prayer-box jumma">
+                        <div class="prayer-label">জুম'আ</div>
+                        <div class="prayer-time-val">01:15 PM</div>
+                        <div class="prayer-azan">আযান ১২:৪৫</div>
+                    </div>
+                    <div class="prayer-box sunrise">
+                        <div class="prayer-label">সূর্যোদয়</div>
+                        <div class="prayer-time-val">06:15 AM</div>
+                        <div class="prayer-azan">ইশরাক ৬:৩০</div>
+                    </div>
+                </div>
+                <div class="prayer-five">
+                    <div class="prayer-card-single">
+                        <div class="prayer-icon"><i class="fas fa-cloud-sun"></i></div>
+                        <h4>ফজর</h4>
+                        <div class="prayer-time-main">05:00 AM</div>
+                        <div class="prayer-azan-time">আযান ৪:৪৫</div>
+                    </div>
+                    <div class="prayer-card-single">
+                        <div class="prayer-icon"><i class="fas fa-sun"></i></div>
+                        <h4>যোহর</h4>
+                        <div class="prayer-time-main">01:15 PM</div>
+                        <div class="prayer-azan-time">আযান ১:০০</div>
+                    </div>
+                    <div class="prayer-card-single">
+                        <div class="prayer-icon"><i class="fas fa-cloud"></i></div>
+                        <h4>আসর</h4>
+                        <div class="prayer-time-main">05:00 PM</div>
+                        <div class="prayer-azan-time">আযান ৪:৪৫</div>
+                    </div>
+                    <div class="prayer-card-single">
+                        <div class="prayer-icon"><i class="fas fa-cloud-moon"></i></div>
+                        <h4>মাগরিব</h4>
+                        <div class="prayer-time-main">06:20 PM</div>
+                        <div class="prayer-azan-time">আযান ৬:১৫</div>
+                    </div>
+                    <div class="prayer-card-single">
+                        <div class="prayer-icon"><i class="fas fa-moon"></i></div>
+                        <h4>ইশা</h4>
+                        <div class="prayer-time-main">08:00 PM</div>
+                        <div class="prayer-azan-time">আযান ৭:৪৫</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== WHAT WE DO ========== -->
+    <section class="services-section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">আমাদের সেবাসমূহ</h2>
+                <p class="section-subtitle">মসজিদের মাধ্যমে আমরা সমাজে যে সেবাগুলো প্রদান করি</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-img">
+                        <i class="fas fa-praying-hands"></i>
+                    </div>
+                    <h3>দৈনিক নামাজ</h3>
+                    <p>পাঁচ ওয়াক্ত নামাজ জামাতে আদায়ের ব্যবস্থা এবং জুমার নামাজের বিশেষ আয়োজন।</p>
+                    <a href="#" class="btn btn-small">বিস্তারিত</a>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <i class="fas fa-book-quran"></i>
+                    </div>
+                    <h3>কুরআন শিক্ষা</h3>
+                    <p>শিশু ও বয়স্কদের জন্য কুরআন শিক্ষা কার্যক্রম ও হিফজ ক্লাস পরিচালনা।</p>
+                    <a href="#" class="btn btn-small">বিস্তারিত</a>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>ইসলামি শিক্ষা</h3>
+                    <p>সাপ্তাহিক তালিম, ওয়াজ মাহফিল এবং ইসলামি জ্ঞান চর্চার আয়োজন।</p>
+                    <a href="#" class="btn btn-small">বিস্তারিত</a>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>সমাজসেবা</h3>
+                    <p>দরিদ্রদের সাহায্য, বিনামূল্যে চিকিৎসা সেবা এবং জনকল্যাণমূলক কাজ।</p>
+                    <a href="#" class="btn btn-small">বিস্তারিত</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT / ACTIVITIES BANNER ========== -->
+    <section class="about-banner" id="about">
+        <div class="about-banner-overlay"></div>
+        <div class="container about-banner-content">
+            <div class="about-text-side">
+                <h2>মসজিদের কার্যক্রম</h2>
+                <div class="about-item">
+                    <div class="about-item-icon"><i class="fas fa-mosque"></i></div>
+                    <div>
+                        <h4>ইসলামি পত্রিকা প্রকাশনা</h4>
+                        <p>মাসিক ইসলামি পত্রিকা প্রকাশ ও বিতরণ করা হয় যাতে মুসলিমদের মাঝে জ্ঞান ছড়িয়ে যায়।</p>
+                    </div>
+                </div>
+                <div class="about-item">
+                    <div class="about-item-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div>
+                        <h4>মাদ্রাসা পরিচালনা</h4>
+                        <p>শিশুদের জন্য মক্তব এবং হাফেজি মাদ্রাসা পরিচালনা করা হয়।</p>
+                    </div>
+                </div>
+                <div class="about-item">
+                    <div class="about-item-icon"><i class="fas fa-book-open"></i></div>
+                    <div>
+                        <h4>ইসলামি লাইব্রেরি</h4>
+                        <p>মসজিদে একটি সমৃদ্ধ ইসলামি লাইব্রেরি রয়েছে যেখানে বিভিন্ন ইসলামি বই পাওয়া যায়।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ACTIVITIES GALLERY ========== -->
+    <section class="activities-section" id="events">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">মসজিদের কার্যক্রম</h2>
+                <p class="section-subtitle">আমাদের বিভিন্ন ইসলামি ও সামাজিক কার্যক্রমের ঝলক দেখুন</p>
+            </div>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-img" style="background: linear-gradient(135deg, #1a7a4c, #0d5c36);">
+                        <i class="fas fa-star-and-crescent"></i>
+                    </div>
+                    <div class="activity-info">
+                        <span class="activity-date"><i class="fas fa-calendar"></i> প্রতি শুক্রবার</span>
+                        <h4>জুম'আর নামাজ</h4>
+                    </div>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-img" style="background: linear-gradient(135deg, #e8a317, #d4911a);">
+                        <i class="fas fa-book-quran"></i>
+                    </div>
+                    <div class="activity-info">
+                        <span class="activity-date"><i class="fas fa-calendar"></i> প্রতিদিন</span>
+                        <h4>কুরআন তিলাওয়াত</h4>
+                    </div>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-img" style="background: linear-gradient(135deg, #2c3e50, #34495e);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="activity-info">
+                        <span class="activity-date"><i class="fas fa-calendar"></i> সাপ্তাহিক</span>
+                        <h4>তালিম ও ওয়াজ</h4>
+                    </div>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-img" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="activity-info">
+                        <span class="activity-date"><i class="fas fa-calendar"></i> প্রতিদিন</span>
+                        <h4>মক্তব শিক্ষা</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PRAYER GALLERY BANNER ========== -->
+    <section class="gallery-banner">
+        <div class="gallery-banner-overlay"></div>
+        <div class="gallery-banner-content">
+            <h2>বায়তুল আমান জামে মসজিদে নামাজ</h2>
+            <p>জামাতে নামাজ আদায়ের সওয়াব একাকী নামাজের চেয়ে ২৭ গুণ বেশি</p>
+        </div>
+    </section>
+
+    <!-- ========== INCOME & EXPENSE REPORT ========== -->
+    <section class="hisab-section" id="hisab">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">আয় ও ব্যয়ের হিসাব</h2>
+                <p class="section-subtitle">বায়তুল আমান জামে মসজিদের মাসিক চাঁদা ও আর্থিক হিসাবের স্বচ্ছ প্রতিবেদন</p>
+            </div>
+
+            <!-- Summary Cards (updated live from Google Sheet) -->
+            <div class="hisab-summary">
+                <div class="hisab-card hisab-members">
+                    <div class="hisab-card-icon"><i class="fas fa-users"></i></div>
+                    <div class="hisab-card-info">
+                        <h4>মোট মুসল্লি</h4>
+                        <span class="hisab-number" id="statTotal">...</span>
+                    </div>
+                </div>
+                <div class="hisab-card hisab-paid">
+                    <div class="hisab-card-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="hisab-card-info">
+                        <h4>চাঁদা প্রদানকারী</h4>
+                        <span class="hisab-number" id="statPaid">...</span>
+                    </div>
+                </div>
+                <div class="hisab-card hisab-collection">
+                    <div class="hisab-card-icon"><i class="fas fa-coins"></i></div>
+                    <div class="hisab-card-info">
+                        <h4>মোট সংগ্রহ</h4>
+                        <span class="hisab-number" id="statCollection">...</span>
+                    </div>
+                </div>
+                <div class="hisab-card hisab-unpaid">
+                    <div class="hisab-card-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="hisab-card-info">
+                        <h4>বাকি আছে</h4>
+                        <span class="hisab-number" id="statUnpaid">...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Totals -->
+            <div class="monthly-totals" id="monthlyTotals"></div>
+
+            <!-- Live sync indicator -->
+            <div class="hisab-live-badge" id="hisabLiveBadge">
+                <i class="fas fa-sync-alt fa-spin"></i> Google Sheet থেকে ডেটা লোড হচ্ছে...
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="hisab-tabs">
+                <button class="hisab-tab active" data-htab="contribution-list">
+                    <i class="fas fa-list"></i> চাঁদার তালিকা
+                </button>
+                <button class="hisab-tab" data-htab="spreadsheet-view">
+                    <i class="fas fa-table"></i> সম্পূর্ণ হিসাব (Google Sheet)
+                </button>
+            </div>
+
+            <!-- Contribution List Tab -->
+            <div class="hisab-content active" id="contribution-list">
+                <div class="hisab-filter-row">
+                    <div class="hisab-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="hisabSearch" placeholder="নাম দিয়ে খুঁজুন...">
+                    </div>
+                    <div class="hisab-filter-btns">
+                        <button class="hisab-filter active" data-filter="all">সবাই</button>
+                        <button class="hisab-filter" data-filter="paid">পরিশোধিত</button>
+                        <button class="hisab-filter" data-filter="unpaid">অপরিশোধিত</button>
+                    </div>
+                </div>
+                <div class="hisab-table-wrap">
+                    <table class="hisab-table" id="hisabTable">
+                        <thead id="hisabThead"></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="hisab-table-footer">
+                    <span id="hisabShowing">ডেটা লোড হচ্ছে...</span>
+                    <span class="hisab-total-badge"><i class="fas fa-calculator"></i> মোট সংগ্রহ: <span id="hisabTotalBadge">...</span></span>
+                </div>
+            </div>
+
+            <!-- Google Sheet Embed Tab -->
+            <div class="hisab-content" id="spreadsheet-view">
+                <div class="spreadsheet-embed">
+                    <iframe
+                        src="https://docs.google.com/spreadsheets/d/1uMZ36fbl7gjTe3FCqxn4GoEXAvxqaaAJLAHla9WC3mg/pubhtml?widget=true&headers=false&gid=1"
+                        width="100%"
+                        height="600"
+                        frameborder="0"
+                        style="border: 0; border-radius: 12px;"
+                        title="বায়তুল আমান জামে মসজিদ - আয় ও ব্যয়ের হিসাব">
+                    </iframe>
+                </div>
+                <div class="spreadsheet-link">
+                    <a href="https://docs.google.com/spreadsheets/d/1uMZ36fbl7gjTe3FCqxn4GoEXAvxqaaAJLAHla9WC3mg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i> Google Sheet-এ সম্পূর্ণ হিসাব দেখুন
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS ========== -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">মুসল্লিদের মতামত</h2>
+                <p class="section-subtitle">আমাদের মসজিদ সম্পর্কে মুসল্লিদের অভিজ্ঞতা ও মতামত</p>
+            </div>
+            <div class="testimonials-slider">
+                <button class="slider-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                <div class="testimonials-track" id="testimonialsTrack">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            <p>"বায়তুল আমান জামে মসজিদ আমাদের এলাকার গর্ব। এখানে পাঁচ ওয়াক্ত নামাজ জামাতে হয় এবং ইমাম সাহেবের তিলাওয়াত অত্যন্ত সুন্দর। মসজিদের পরিবেশ খুবই পরিষ্কার ও মনোরম।"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4>আব্দুল করিম</h4>
+                                <span>স্থানীয় মুসল্লি</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card active">
+                        <div class="testimonial-text">
+                            <p>"আমার সন্তানরা এখানে কুরআন শিক্ষা নিচ্ছে। শিক্ষকরা অত্যন্ত যোগ্য এবং স্নেহশীল। মসজিদ কমিটি সবসময় মুসল্লিদের সুবিধার কথা চিন্তা করে। আলহামদুলিল্লাহ।"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4>মোহাম্মদ হাসান</h4>
+                                <span>অভিভাবক</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            <p>"মসজিদের সমাজসেবা কার্যক্রম প্রশংসনীয়। রমজানে ইফতার বিতরণ, দরিদ্রদের যাকাত প্রদান এবং শীতবস্ত্র বিতরণ - সব কিছুতেই মসজিদ এগিয়ে।"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4>রফিকুল ইসলাম</h4>
+                                <span>কমিটি সদস্য</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="slider-dots" id="sliderDots">
+                <span class="dot"></span>
+                <span class="dot active"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== LOCATION MAP ========== -->
+    <section class="map-section" id="location">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">আমাদের অবস্থান</h2>
+                <p class="section-subtitle">বায়তুল আমান জামে মসজিদে আসুন এবং জামাতে নামাজ আদায় করুন</p>
+            </div>
+            <div class="map-wrapper">
+                <div class="map-info-card">
+                    <div class="map-info-icon">
+                        <i class="fas fa-mosque"></i>
+                    </div>
+                    <h3>বায়তুল আমান জামে মসজিদ</h3>
+                    <p class="map-info-en">Baitul Aman Jame Masjid</p>
+                    <div class="map-details">
+                        <div class="map-detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>বরিশাল, বাংলাদেশ</span>
+                        </div>
+                        <div class="map-detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span>সার্বক্ষণিক খোলা</span>
+                        </div>
+                        <div class="map-detail-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+880 1XXX-XXXXXX</span>
+                        </div>
+                    </div>
+                    <a href="https://maps.app.goo.gl/hCmSYgPRPtVFByWL7" target="_blank" rel="noopener noreferrer" class="btn btn-primary map-direction-btn">
+                        <i class="fas fa-directions"></i> দিকনির্দেশনা পান
+                    </a>
+                </div>
+                <div class="map-embed">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.0!2d90.3382319!3d22.6972572!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375535492304af7f%3A0xa2dd4f2815527e9b!2z4Kas4Ka-4Kav4Ka84Kak4KeB4KayIOCmhuCmruCmvuCmqCDgppzgpr7gpq7gp4cg4Kau4Ka44Kac4Ka_4KalIC0gQmFpdHVsIEFtYW4gSmFtZSBNYXNqaWQ!5e0!3m2!1sbn!2sbd!4v1710000000000"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="বায়তুল আমান জামে মসজিদ - Google Maps">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-about">
+                    <div class="footer-logo">
+                        <div class="logo-icon"><i class="fas fa-mosque"></i></div>
+                        <div class="logo-text">
+                            <span class="logo-bn">বায়তুল আমান</span>
+                            <span class="logo-en">Baitul Aman Jame Masjid</span>
+                        </div>
+                    </div>
+                    <p>বায়তুল আমান জামে মসজিদ - আমাদের এলাকার একটি ঐতিহ্যবাহী মসজিদ। আসুন আমরা একসাথে আল্লাহর সন্তুষ্টি অর্জন করি।</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>দ্রুত লিংক</h4>
+                    <ul>
+                        <li><a href="#home">হোম</a></li>
+                        <li><a href="#about">আমাদের সম্পর্কে</a></li>
+                        <li><a href="#services">সেবাসমূহ</a></li>
+                        <li><a href="#prayer-times">নামাজের সময়</a></li>
+                        <li><a href="#hisab">আয়-ব্যয়</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>সেবাসমূহ</h4>
+                    <ul>
+                        <li><a href="#">দৈনিক নামাজ</a></li>
+                        <li><a href="#">কুরআন শিক্ষা</a></li>
+                        <li><a href="#">ইসলামি পরামর্শ</a></li>
+                        <li><a href="#">সমাজসেবা</a></li>
+                        <li><a href="#">বিবাহ নিবন্ধন</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>যোগাযোগ</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> <a href="https://maps.app.goo.gl/hCmSYgPRPtVFByWL7" target="_blank" rel="noopener noreferrer" style="color: inherit;">বায়তুল আমান জামে মসজিদ, বরিশাল, বাংলাদেশ</a></p>
+                        <p><i class="fas fa-phone"></i> +880 1XXX-XXXXXX</p>
+                        <p><i class="fas fa-envelope"></i> info@baitulaman.org</p>
+                    </div>
+                    <div class="newsletter">
+                        <h4>নিউজলেটার</h4>
+                        <form class="newsletter-form" id="newsletterForm">
+                            <input type="email" placeholder="আপনার ইমেইল দিন">
+                            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 বায়তুল আমান জামে মসজিদ | সর্বস্বত্ব সংরক্ষিত</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#home" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <script src="app.js"></script>
+</body>
+</html>
