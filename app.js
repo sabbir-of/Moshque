@@ -122,7 +122,7 @@ const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tq
 
 // Google Apps Script Web App URL — reads ALL cell values including dropdown selections
 // To set up: see instructions in the README or follow the setup steps
-let APPS_SCRIPT_URL = '';
+let APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwr4TfVZ8RGD6otNLPRRaWrPFImIBteQ220fdM0tXCQ_c03qvYLswcQHc15U405ydU-/exec';
 
 let musalliData = [];
 let monthColumns = [];
