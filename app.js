@@ -478,9 +478,9 @@ function renderHisabTable(filter = 'all', search = '') {
             const amount = m.months[mc.label] || 0;
 
             if (status === 'yes') {
-                rowHtml += `<td><span class="hisab-month-yes"><i class="fas fa-check-circle"></i> হ্যাঁ</span></td>`;
+                rowHtml += `<td><span class="hisab-month-yes"><i class="fas fa-check-circle"></i> Done</span></td>`;
             } else if (status === 'no') {
-                rowHtml += `<td><span class="hisab-month-no"><i class="fas fa-times-circle"></i> না</span></td>`;
+                rowHtml += `<td><span class="hisab-month-no"><i class="fas fa-times-circle"></i> NYD</span></td>`;
             } else if (status === 'number') {
                 rowHtml += `<td><strong>৳${toBn(amount.toLocaleString())}</strong></td>`;
             } else {
